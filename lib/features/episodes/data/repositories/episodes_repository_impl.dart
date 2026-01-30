@@ -20,6 +20,9 @@ class EpisodesRepositoryImpl implements EpisodesRepository {
           e.type == DioExceptionType.receiveTimeout) {
         return const Left(NetworkFailure('Connection timeout'));
       }
+      if (e.response?.statusCode == 401) {
+        return const Left(UnauthorizedFailure('Unauthorized'));
+      }
       if (e.response?.statusCode != null && e.response!.statusCode! >= 500) {
         return const Left(ServerFailure('Server error'));
       }
